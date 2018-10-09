@@ -22,6 +22,8 @@ Yes, only Python and its so-great standard library :) I love bare-python.
 
 Note that if you're using Linux, most distribution have a separate package for tkinter, like python3-tkinter for debian-based OS.
 
+Sorry if you're using Python 2, this code does not backport but you can use the recipes in your own project.
+
 ## Usage
 
 TkCode can be called as a module if available in the PYTHONPATH (or if you're the project checkout directory):
