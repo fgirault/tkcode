@@ -131,6 +131,8 @@ class TextEditorFrame(tk.ttk.Frame):
 
     def __init__(self, parent, file_obj=None):
         super().__init__(parent)
+        # tk.Text is not a ttk widget ! color customization "by hand"
+        # TODO : dig colors from the theme
         self.text = tk.Text(
             self,
             background=COLORS.text_bg,

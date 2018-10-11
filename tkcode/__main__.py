@@ -7,7 +7,6 @@ from tkcode.app import App
 
 app = App()
 
-# For development only, until state recovery comes :)
 app.build_ui()
 
 if len(sys.argv) > 1:
@@ -18,6 +17,6 @@ if len(sys.argv) > 1:
         app.open_file(arg)
 else:
     # TODO add condition depending on settings
-    app.show_welcome()
+    app.run_command("show_welcome")
 
 app.run()

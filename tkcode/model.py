@@ -3,6 +3,7 @@ import os
 
 # pylint: disable=too-few-public-methods
 
+
 class FSEntryFactory:
     """A factory of model objects with a cache"""
 
@@ -71,6 +72,7 @@ class FSEntry:
 
 class FileEntry(FSEntry):
     """File entry model class"""
+
     def __get_content(self):
         return open(self.path).read()
 
@@ -130,7 +132,7 @@ class TkCodeModel:
             for observer in self.observers
             if hasattr(observer, method_name)
             and getattr(observer, method_name).__self__ is not originator
-            ]
+        ]
 
     def open_folder(self, path, originator=None):
         """open a folder """

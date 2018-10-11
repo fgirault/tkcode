@@ -62,7 +62,6 @@ class Explorer(SidePanel):
             "", "end", text="FOLDERS", open=tk.YES, tags=("expandable",)
         )
 
-
         self.tree.bind("<<TreeviewOpen>>", self.on_treeview_open)
         # "<<TreeviewSelect>>" handling is rewritten in on_click
         self.tree.bind("<Button-1>", self.on_click)
@@ -222,6 +221,6 @@ class Explorer(SidePanel):
                     self.app.select_file(file_obj, self)
                 else:
                     self.curexpl_iid = iid
-                    self.app.open_file(path)
+                    self.app.run_command("open_file", path)
 
         return "break"

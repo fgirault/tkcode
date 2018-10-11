@@ -2,13 +2,17 @@
 import collections
 import os
 
+# application name
 APP_NAME = "tkcode"
 
+# a short description
 APP_DESC = "Flat Design User Interface witk Themed Tk"
 
+# a long description
 APP_LONG_DESC = """tkcode is a text editor inspired by all those dark themed editors
 like Sublime Text, Atom and VS Code that has stolen everything .. ."""
 
+# application version
 APP_VERSION = "0.0a"
 
 # default dark palette
@@ -24,13 +28,29 @@ COLOR_DATA = dict(
     status_bg="#d35400",  # status bar foreground
     status_fg="#ffffff",  # status bar background
     selected_bg="#d35400",  # active selection background
-    selected_fg="#ffffff",  # active selection background
+    selected_fg="#ffffff",  # active selection foreground
     text_bg="#1e1e1e",  # default text editor background
     text_fg="#eeeeee",  # default text editor foreground
 )
 
-
 # END OF USER SETTING
+
+# DEVELOPER SETTINGS
+
+# command metadata as tuple:
+# label, method name to call on the app object, description (optional), shortcut (optional)
+# COMMAND_DATA = [
+#     ("Show Welcome", "show_welcome", "Show welcome screen"),
+#     ("FILE: Open", "open_file", "Open file from filesystem", "<Control-o>"),
+#     (
+#         "FILE: Open folder",
+#         "open_folder",
+#         "Open file from filesystem",
+#         "<Control-Shift-o>",
+#     ),
+#     ("FILE: Close", "close_file", "Open file from filesystem", "<Control-w>"),
+# ]
+
 
 # List of availabled palette properties
 PALETTE_PROPERTIES = [
@@ -62,13 +82,11 @@ IMG_DIR = os.path.join(os.path.dirname(__file__), "img")
 class Settings:
     """An api over setting data that also listen to model changes """
 
-    def __init___(self, model):
-
+    def __init__(self, model, name=APP_NAME):
         self.model = model
+        self.name = name
 
         model.add_observer(self)
-
-    name = property(lambda self: APP_NAME)
 
     desc = property(lambda self: APP_DESC)
 

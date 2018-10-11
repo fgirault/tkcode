@@ -2,36 +2,26 @@
 import os
 import tkinter as tk
 
-# may be rewrite the filedialog one day
-import tkinter.filedialog as filedialog
-
-
-import tkcode.settings as settings
-
 # observable model
-from .model import TkCodeModel
+import tkcode.model
+
+# application settings
+import tkcode.settings
+
+# core components
+from tkcode.commander import Commander
+
+# register commands by importing decorated functions
+import tkcode.commands
+
+# ui theming
+import tkcode.theme
 
 # Visual components
-from .sidebar import SideBar
-from .editor import EditorFrame
-from .statusbar import StatusBar
-from .palette import PaletteFrame
-
-from .theme import build_style
-
-
-class Command:
-    """Base class for commands meant to be displayed in the palette """
-
-    def __init__(self, title, command, desc="", shortcut=""):
-        self.title = title
-        self.command = command
-        self.desc = desc
-        self.shortcut = shortcut
-
-    def execute(self, *args, **kw):
-        """Execute the callable self.command"""
-        self.command(*args, **kw)
+from tkcode.sidebar import SideBar
+from tkcode.editor import EditorFrame
+from tkcode.statusbar import StatusBar
+from tkcode.palette import PaletteFrame
 
 
 class App:
@@ -40,53 +30,41 @@ class App:
     like a controller
     """
 
-    # A suffix added to the window title
-    TITLE_SUFFIX = "tkcode"
-
-    # command meta
-    command_data = [
-        ("Show Welcome", "show_welcome", "Show welcome screen"),
-        ("FILE: Open", "open_file", "Open file from filesystem", "<Control-o>"),
-        (
-            "FILE: Open folder",
-            "open_folder",
-            "Open file from filesystem",
-            "<Control-Shift-o>",
-        ),
-        ("FILE: Close", "close_file", "Open file from filesystem", "<Control-w>"),
-    ]
-
     def __init__(self):
         """ constructor """
-        self.name = settings.APP_NAME
-        self.desc = settings.APP_DESC
-        self.root = None  # tkinter Tk instance
-        self.model = TkCodeModel()  # observable data model
+
+        self.model = tkcode.model.TkCodeModel()  # observable data model
 
         self.model.add_observer(self)
+
+        self.settings = tkcode.settings.Settings(self.model)
+
+        self.root = None  # tkinter Tk instance
 
         # The components of the interface
         self.sidebar = None
         self.notebook = None
         self.statusbar = None
-        self.console = None
         self.palette = None
+        self.commander = None
 
-        # list of command instances
-        self.commands = []
+        # later:
+        # self.console = None
 
     def build_ui(self):
         """  builds the user interface """
         self.root = root = tk.Tk()
-        root.title(self.name)
+        root.title(self.settings.name)
         root.minsize(300, 300)
         root.geometry("1000x700")
 
-        self.commands = self.build_commands(self.command_data)
+        style = tkcode.theme.build_style(self.settings.colors)
+
+        style.theme_use("tkcode")
+
+        self.commander = Commander(self)
 
         root.bind("<Control-p>", self.show_palette)
-
-        build_style(settings.COLORS)
 
         # horizontal layout for the sidebar to expand / collapse panels
         self.paned = paned = tk.ttk.PanedWindow(root, orient=tk.HORIZONTAL)
@@ -101,18 +79,7 @@ class App:
         self.statusbar = StatusBar(root, self)
         self.statusbar.pack(fill=tk.X, side=tk.BOTTOM)
 
-        self.palette = PaletteFrame(self.editor_frame, self.commands)
-
-    def build_commands(self, command_data):
-        """ Builds command objects """
-        commands = []
-        for row in command_data:
-            command = Command(*row)
-            command.command = getattr(self, command.command)
-            if command.shortcut:
-                self.root.bind(command.shortcut, lambda e: command.execute())
-            commands.append(command)
-        return commands
+        self.palette = PaletteFrame(self.editor_frame, self.commander)
 
     def run(self):
         """ launch the application """
@@ -126,40 +93,27 @@ class App:
 
     def on_file_selected(self, file_obj):
         """ callback on file selection : set the window title """
-        self.root.title("%s - %s" % (file_obj.basename, self.name))
+        self.root.title("%s - %s" % (file_obj.basename, self.settings.name))
 
     # methods below are the controller methods
 
-    def open_folder(self, path=None):
-        """" open a directory, ask for path if none provided  """
-        if not path:
-            path = filedialog.askdirectory()
-        if path:
-            self.model.open_folder(path)
+    def command_callable(self, name):
+        """create a callable of a command """
+
+        def _callback(*args, **kwargs):
+            self.commander.run(name, *args, **kwargs)
+
+        return _callback
+
+    def run_command(self, name, *args, **kwargs):
+        self.commander.run(name, *args, **kwargs)
 
     def preview_file(self, file_obj):
         self.model.set_preview(file_obj)
 
-    def open_file(self, path=None):
-        """ open a file, ask for path if none provided  """
-        if not path:
-            path = filedialog.askopenfilename()
-        if path:
-            self.model.open_file(path)
-
     def select_file(self, file_obj, originator):
         """ set a file as selected """
         self.model.set_current_file(file_obj, originator)
-
-    def close_file(self, file_obj=None, originator=None):
-        """ close a file """
-        if file_obj is None:
-            file_obj = self.model.current_file
-        self.model.close_file(file_obj, originator)
-
-    def show_welcome(self):
-        """ show welcome frame """
-        self.editor_frame.show_welcome()
 
     def show_palette(self, event):
         """ show tool palette """

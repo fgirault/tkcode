@@ -52,27 +52,42 @@ class PaletteFrame(ttk.Frame):
     Enter launch the selected command.
     """
 
-    def __init__(self, parent, commands):
+    def __init__(self, parent, commander):
         super().__init__(parent)
+
+        self.commander = commander
+
         self.visible = False
-        self.bind("<Escape>", lambda e: self.place_forget())
+
+        # input text model
         self.search_var = tk.StringVar()
+
+        # callback on input text change
         self.search_var.trace("w", self.on_search_change)
+
+        # input widget
         self.entry = ttk.Entry(self, textvariable=self.search_var)
         self.entry.pack(side=tk.TOP, fill=tk.X)
-        self.entry.bind("<Escape>", lambda e: self.place_forget())
-        self.entry.bind("<Control-p>", lambda e: self.place_forget())
 
+        # key bindings
+        # hide
+        self.entry.bind("<Escape>", lambda e: self.place_forget())
+        # show
+        self.entry.bind("<Control-p>", lambda e: self.place_forget())
+        # select upper command
         self.entry.bind("<Up>", self.on_up)
+        # select lower command
         self.entry.bind("<Down>", self.on_down)
 
         self.entry.bind("<Return>", self.on_enter)
 
+        # list of visual command representation
         self.command_frames = []
 
+        # current index of the selection
         self.current_command = 0
 
-        for command in commands:
+        for command in self.commander.COMMANDS:
             frame = CommandFrame(self, command)
             frame.pack(side=tk.TOP, fill=tk.X)
             self.command_frames.append(frame)
@@ -133,4 +148,4 @@ class PaletteFrame(ttk.Frame):
         if self.current_command > -1:
             self.place_forget()
             self.visible = False
-            self.command_frames[self.current_command].command.execute()
+            self.commander.run(self.command_frames[self.current_command].command)

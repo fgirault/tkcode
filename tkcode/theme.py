@@ -6,13 +6,13 @@ from tkcode.settings import Palette
 
 
 def build_style(colors: Palette):
-    """Create  """
+    """Create a flat design style based on a palette of colors"""
 
     style = tkinter.ttk.Style()
 
     style.theme_create(
         "tkcode",
-        parent="alt",
+        parent="default",
         settings={
             ".": {"configure": {"background": colors.bg, "foreground": colors.fg}},
             "TNotebook": {
@@ -116,4 +116,4 @@ def build_style(colors: Palette):
 
     style.layout("Treeview", [("Treeview.treearea", {"sticky": "nswe"})])
 
-    style.theme_use("tkcode")
+    return style

@@ -10,8 +10,10 @@ from tkcode.settings import IMG_DIR
 
 # pylint: disable=too-many-ancestors
 
+
 class ActivityButton(ttk.Button):
     """A button of the side bar, toggle the visibility of the panel content """
+
     def __init__(self, parent, panel_class, **kw):
         self.panel_class = panel_class
         self.icon_img = tk.PhotoImage(file=os.path.join(IMG_DIR, panel_class.ICON_PATH))
@@ -30,7 +32,7 @@ class ButtonStack(ttk.Frame):
             )
             button.pack(side=tk.TOP, padx=4, pady=4)
             self.buttons.append(button)
-        ttk.Button(self, text="?", command=app.show_welcome).pack(
+        ttk.Button(self, text="?", command=app.command_callable("show_welcome")).pack(
             side=tk.BOTTOM, padx=4, pady=4
         )
 

@@ -4,6 +4,7 @@ from tkinter import ttk
 
 # pylint: disable=too-many-ancestors
 
+
 class StatusBar(ttk.Frame):
     """A basic status bar with a label (static for now).
     TODO: be notified when command object are executed, add widgets ...

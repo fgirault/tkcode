@@ -28,7 +28,7 @@ class LinksFrame(ttk.Frame):
 
 
 class RecentLinksFrame(LinksFrame):
-    """A frame display a list of last opened folders"""
+    """A frame display a list of last opened  in the model"""
 
     def __init__(self, parent, app):
         super().__init__(parent, "Recent")
@@ -37,7 +37,10 @@ class RecentLinksFrame(LinksFrame):
 
     def on_folder_open(self, folder):
         """model callback"""
-        self.add_link(folder.basename, lambda: self.app.open_folder(folder.path))
+        self.add_link(
+            folder.basename,
+            lambda: self.app.command_callable("open_folder")(folder.path),
+        )
 
 
 class WelcomeTab(ttk.Frame):
@@ -45,10 +48,10 @@ class WelcomeTab(ttk.Frame):
 
     def __init__(self, parent, app):
         super().__init__(parent, style="Welcome.TFrame", padding=[56, 12, 8, 8])
-        ttk.Label(self, text=app.name, style="Heading.TLabel").pack(
+        ttk.Label(self, text=app.settings.name, style="Heading.TLabel").pack(
             side=tk.TOP, anchor=tk.W
         )
-        ttk.Label(self, text=app.desc, style="SubHeading.TLabel").pack(
+        ttk.Label(self, text=app.settings.desc, style="SubHeading.TLabel").pack(
             side=tk.TOP, anchor=tk.W
         )
 
@@ -62,8 +65,8 @@ class WelcomeTab(ttk.Frame):
             left_frame,
             "Start",
             (
-                ("Open folder ...", app.open_folder),
-                ("Open file ...", app.open_file),
+                ("Open folder ...", app.command_callable("open_folder")),
+                ("Open file ...", app.command_callable("open_file")),
                 ("Clone git repository ...", None),
             ),
         ).pack(side=tk.TOP, anchor=tk.W, pady=12)

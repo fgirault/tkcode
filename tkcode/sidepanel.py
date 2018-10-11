@@ -5,6 +5,7 @@ from tkinter import ttk
 
 # pylint: disable=too-many-ancestors
 
+
 class SidePanel(ttk.Frame):
     """base class for side panels """
 

@@ -10,6 +10,7 @@ from .settings import IMG_DIR
 
 # pylint: disable=too-many-ancestors
 
+
 class Search(SidePanel):
     """A search panel object.
     TODO: implement it ;)"""
