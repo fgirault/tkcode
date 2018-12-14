@@ -4,7 +4,7 @@ TkCode is a "visual clone" of modern dark themed editors, that shall be consider
 
 ![TkCode screenshot](https://raw.githubusercontent.com/fgirault/pyconfr2018/master/screenshots/tkcode.png)
 
-It shows a possibility of building minimal user interfaces using tkinter with the ttk module (Themed Tk) that are included in the standard libraru of Python.
+It shows a possibility of building minimal user interfaces using tkinter with the ttk module (Themed Tk) that are included in the standard library.
 
 It also implements several common design patterns like command, observer, factory ...
 
@@ -52,7 +52,7 @@ For the template goal:
  - i18n (gettext)
  - keyboard shortcuts
  - help screen
- - add feedback when rolling over clickable ui elements (highlight)
+ - add feedback when rolling over clickable ui elements (highlight and cursor)
  - status bar api
  - image directory loader so usign icons does not requires instantiating PhotoImage at each image usage
  - plugin architecture
