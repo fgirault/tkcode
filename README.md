@@ -26,7 +26,7 @@ Sorry if you're using Python 2, this code does not backport but you can use the 
 
 ## Usage
 
-TkCode can be called as a module if available in the PYTHONPATH (or if you're the project checkout directory):
+TkCode can be called as a module if available in the PYTHONPATH (or if you're already in the project checkout directory):
 
 ```bash
 $ python3 -m tkcode
@@ -37,7 +37,7 @@ You can:
 - Open a folder or a file with the link on the welcome page
 - Click on a file in the explorer panel to view it
 - Double-click to open it in a new tab 
-- Use Control+P to show the palette, type letters or word and navigate with arrows
+- Use Control+P to show the palette, type letters or word and navigate with arrows typing word matching what you want to do
 
 
 ## Customize
@@ -61,10 +61,11 @@ Add edit functions (lower priority):
 
  - save
  - search (there's some async challenge here)
- - syntax highlighter or
+ - syntax highlighter
  - try to integrate idle3 editing widget ? or fork idle3 to make some silly ux things ?
  - line number
 
 Take over the world:
 
  - build a framework
+ - redesign idle
